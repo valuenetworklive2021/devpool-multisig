@@ -41,16 +41,16 @@ contract Tresury {
         address payable to;
         uint approvals;
         bool sent;
+        IERC20 token;
     }
     Transfer[] public transfers;
     mapping(address => mapping(uint => bool)) public approvals;
     
     IERC20 public dai;
     
-    constructor(address[] memory _approvers, uint _votes , address _dai) public {
+    constructor(address[] memory _approvers, uint _votes) public {
         approvers = _approvers;
         votes = _votes;
-        dai = IERC20(_dai);
     }
     
     function getApprovers() external view returns(address[] memory) {
@@ -61,13 +61,14 @@ contract Tresury {
         return transfers;
     }
 
-    function createTransfer(uint amount, address payable to) external onlyApprover() {
+    function createTransfer(uint amount,IERC20 _token,address payable to) external onlyApprover() {
         transfers.push(Transfer(
             transfers.length,
             amount,
             to,
             0,
-            false
+            false,
+            _token
         ));
     }
     
@@ -82,12 +83,12 @@ contract Tresury {
             transfers[id].sent = true;
             address payable to = transfers[id].to;
             uint amount = transfers[id].amount;
-            dai.transfer(to,amount);
+            transfers[id].token.transfer(to,amount);
         }
     }
     
-    function getTotaldai() public view returns(uint256){
-        return dai.balanceOf(address(this));
+    function getContractTokenBalance(IERC20 _token) public view returns (uint256) {
+        return _token.balanceOf(address(this));
     }
     
     modifier onlyApprover() {
