@@ -33,8 +33,6 @@ interface IERC20 {
 }
 
 
-
-
 interface ILinearVesting {
     
     event ScheduleCreated(address indexed _beneficiary);
@@ -61,7 +59,7 @@ interface ILinearVesting {
 
     function remainingBalance(address _beneficiary) external view returns (uint256);
     
-    function drawDown()  external returns (bool);
+    function drawDown() external returns (bool);
 }
 
 contract devpool {
@@ -81,14 +79,14 @@ contract devpool {
     IERC20 public dai;
     ILinearVesting public linearVesting;
     
-    constructor(address[] memory _approvers, uint _votes,address _linearmeeting) public {
+    constructor(address[] memory _approvers, uint _votes,address _linearvesting) public {
         approvers = _approvers;
         votes = _votes;
-        linearVesting = ILinearVesting(_linearmeeting);
+        linearVesting = ILinearVesting(_linearvesting);
     }
     
-    function drawdownpool() public view returns(bool) {
-        return linearVesting.drawDown();
+    function drawdownpool() public returns(bool) {
+         linearVesting.drawDown();
     }
     
     function getApprovers() external view returns(address[] memory) {
