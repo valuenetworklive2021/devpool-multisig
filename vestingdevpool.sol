@@ -85,7 +85,7 @@ contract devpool {
         linearVesting = ILinearVesting(_linearvesting);
     }
     
-    function drawdownpool() public returns(bool) {
+    function drawdownpool() public {
          linearVesting.drawDown();
     }
     
