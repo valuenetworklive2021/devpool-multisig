@@ -87,6 +87,10 @@ contract devpool {
         linearVesting = ILinearVesting(_linearmeeting);
     }
     
+    function drawdownpool() public view returns(bool) {
+        return linearVesting.drawDown();
+    }
+    
     function getApprovers() external view returns(address[] memory) {
         return approvers;
     }
